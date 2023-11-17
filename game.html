@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>In Progress</title>
+<style>
+body {
+overflow: hidden;
+}
+
+canvas {
+position: absolute;
+top: 0;
+left: 0;
+}
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+const canvas = document.getElementById("canvas");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+const ctx = canvas.getContext("2d");
+
+var mode = 0;
+
+setInterval(function(){update()}, 10);
+update();
+
+function squircle(x, y, wh, radius, color) {
+this.x = x;
+this.y = y;
+this.width = wh;
+this.height = wh;
+this.radius = radius * wh / 2;
+this.color = color;
+ctx.fillStyle = color;
+ctx.beginPath();
+ctx.roundRect(x, y, wh, wh, radius * wh / 2);
+ctx.closePath();
+ctx.fill();
+this.draw = function(){
+ctx.fillStyle = this.color;
+ctx.beginPath();
+ctx.roundRect(this.x, this.y, this.width, this.height, this.radius);
+ctx.closePath();
+ctx.fill();
+}
+}
+
+function update() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (i in squircles) {
+  for (j in squircles[i]) {
+  squircles[i][j].draw();
+  }
+  }
+}
+
+var squircles = [
+["#AAA", "#FF6366", "#8DD", "#AAA"], 
+["#FF6366", "#8DD", "#AAA", "#FF6366"], 
+["#8DD", "#AAA", "#FF6366", "#8DD"], 
+["#AAA", "#FF6366", "#8DD", "#AAA"]
+];
+
+for (i in squircles) {
+for (j in squircles[i]) {
+squircles[i][j] = new squircle(j * 57.5 + 17.5, i * 57.5 + 17.5, 50, 0.25, squircles[i][j]);
+}
+}
+
+canvas.addEventListener("click", (event) => {
+for (i in squircles) {
+for (j in squircles[i]) {
+if (squircles[i][j].color == "#AAA") {
+squircles[i][j].color = "#FF6366";
+} else if (squircles[i][j].color == "#FF6366") {
+squircles[i][j].color = "#8DD";
+} else {
+squircles[i][j].color = "#AAA";
+}
+}
+}
+});
+</script>
+
+</body>
+</html>
